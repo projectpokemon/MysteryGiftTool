@@ -4,8 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
-
-using MysteryGiftTool.Properties;
+using System.Threading.Tasks;
 
 namespace MysteryGiftTool
 {
@@ -19,14 +18,14 @@ namespace MysteryGiftTool
             }
             catch (WebException)
             {
-                Program.Log($"Failed to download {file}.");
+                Console.WriteLine($"Failed to download {file}.");
                 return null;
             }
         }
 
-        public static string MakeCertifiedRequest(string URL, bool json = false)
+        public static async Task<string> MakeCertifiedRequest(string URL, byte[] clCertA, string clCertAPassword, bool json = false)
         {
-            var ClCertA = new X509Certificate2(Resources.ClCertA, Resources.ClCertA_Password);
+            var ClCertA = new X509Certificate2(clCertA, clCertAPassword);
             var wr = WebRequest.Create(new Uri(URL)) as HttpWebRequest;
             wr.UserAgent = $"CTR NUP 040600 {DateTime.Now.ToString("MMMM dd yyyy HH:mm:ss")}";
             wr.KeepAlive = true;
@@ -38,7 +37,7 @@ namespace MysteryGiftTool
             string response;
             try
             {
-                using (var resp = wr.GetResponse() as HttpWebResponse)
+                using (var resp = await wr.GetResponseAsync() as HttpWebResponse)
                 {
                     response = new StreamReader(resp.GetResponseStream()).ReadToEnd();
                 }
