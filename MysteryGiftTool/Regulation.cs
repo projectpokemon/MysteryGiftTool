@@ -15,11 +15,11 @@ namespace MysteryGiftTool
         {
             Name = name;
             Regulations = new List<Regulation>();
-            var num_archives = BitConverter.ToUInt32(archive, 4);
+            var num_archives = BitConverter.ToInt32(archive, 4);
             for (var i = 0; i < num_archives; i++)
             {
-                var ofs = BitConverter.ToUInt32(archive, 0x10 + 8 * i);
-                var len = BitConverter.ToUInt32(archive, 0x14 + 8 * i);
+                var ofs = BitConverter.ToInt32(archive, 0x10 + 8 * i);
+                var len = BitConverter.ToInt32(archive, 0x14 + 8 * i);
                 if (len == 0x4A8)
                 {
                     var reg = new byte[len];
@@ -28,7 +28,7 @@ namespace MysteryGiftTool
                 }
                 else
                 {
-                    Program.Log($"Invalid regulation found in archive! len = {len.ToString("X")}");
+                    Console.WriteLine($"Invalid regulation found in archive! len = {len.ToString("X")}");
                 }
             }
         }
@@ -41,12 +41,12 @@ namespace MysteryGiftTool
             Program.CreateDirectoryIfNull(txt_dir);
             for (var i = 0; i < Regulations.Count; i++)
             {
-                Program.Log($"Regulation {i+1}/{Regulations.Count}:");
+                Console.WriteLine($"Regulation {i+1}/{Regulations.Count}:");
                 var summary = Regulations[i].ToString();
-                Program.Log(summary);
+                Console.WriteLine(summary);
                 File.WriteAllBytes(Path.Combine(bin_dir, $"{Name}_{i+1}.bin"), Regulations[i].Data);
                 File.WriteAllText(Path.Combine(txt_dir, $"{Name}_{i+1}.txt"), summary);
-                Program.Log(string.Empty);
+                Console.WriteLine(string.Empty);
             }
         }
     }
