@@ -105,6 +105,7 @@ namespace MysteryGiftTool
             catch (Exception ex)
             {
                 Console.WriteLine($"An exception occurred: {ex.Message}");
+                throw; // Throw so the exit code is a failure and so the full stack track trace is printed
             }
         }
 
