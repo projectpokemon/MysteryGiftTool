@@ -45,6 +45,7 @@ namespace MysteryGiftTool
             catch (WebException ex)
             {
                 Console.WriteLine("Web exception: " + ex.ToString());
+                Console.WriteLine("Target URL: " + URL);
                 response = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
             }
             return response;
