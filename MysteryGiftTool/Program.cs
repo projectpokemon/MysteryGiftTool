@@ -72,7 +72,7 @@ namespace MysteryGiftTool
                     return;
                 }
 
-                clCertAPassword = args[1];
+                clCertAPassword = args[2];
             }
             else
             {
